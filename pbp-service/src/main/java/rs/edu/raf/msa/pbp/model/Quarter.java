@@ -10,5 +10,5 @@ import java.util.List;
 public class Quarter {
     int q;
 
-    List<Play> plays = new ArrayList<>(100);
+    List<Play> plays = new ArrayList<>(10);
 }

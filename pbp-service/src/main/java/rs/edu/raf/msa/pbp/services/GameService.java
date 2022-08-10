@@ -28,4 +28,6 @@ public class GameService {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error opening game id=" + gameId);
         }
     }
+
+
 }

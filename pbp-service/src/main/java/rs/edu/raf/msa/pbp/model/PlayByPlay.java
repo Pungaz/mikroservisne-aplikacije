@@ -9,11 +9,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import static java.lang.Math.abs;
+
 @Data
 public class PlayByPlay {
-
     Map<String, Player> players = new LinkedHashMap<>();
-
     List<Quarter> quarters = new ArrayList<>(4);
 
     public List<Play> play(String fromMinString, String toMinString) {
@@ -43,10 +43,10 @@ public class PlayByPlay {
     }
 
     public double currentTime(int quarter, String currentTime) {
-        return ((quarter - 1) * 12) + fromStringToDouble(currentTime) - 12.0;
+        return ((quarter - 1) * 12) + abs(fromStringToDouble(currentTime) - 11.60);
     }
 
-    public List<Player> players() {
+    public List<Player> listPlayersByGameId() {
         List<Player> players = new ArrayList<>();
 
         for (Map.Entry<String, Player> entry : getPlayers().entrySet()) {
@@ -54,7 +54,8 @@ public class PlayByPlay {
 //            player.setExternalId(entry.getKey());
             players.add(player);
         }
-        //return new ArrayList<>(getPlayers().values());
+//        return new ArrayList<>(getPlayers().values());
         return players;
     }
+
 }
