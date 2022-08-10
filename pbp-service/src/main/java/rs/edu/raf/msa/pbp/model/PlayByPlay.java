@@ -43,7 +43,11 @@ public class PlayByPlay {
     }
 
     public double currentTime(int quarter, String currentTime) {
-        return ((quarter - 1) * 12) + abs(fromStringToDouble(currentTime) - 11.60);
+        if (!currentTime.equals("12:00")) {
+            return ((quarter - 1) * 12) + abs(fromStringToDouble(currentTime) - 11.60);
+        } else {
+            return (quarter - 1) * 12;
+        }
     }
 
     public List<Player> listPlayersByGameId() {

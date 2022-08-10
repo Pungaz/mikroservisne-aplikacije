@@ -59,7 +59,7 @@ class GameControllerTest {
         List<Play> ps1 = pbp1.play("11:50", "12:10");
         List<Integer> ids1 = ps1.stream().map(Play::getId).collect(Collectors.toList());
         log.debug("{}", ids1);
-        assertThat(ids1).containsExactly(140, 142, 143, 145, 147, 148, 149, 150, 151, 152, 153);
+        assertThat(ids1).containsExactly(140, 142, 143, 145, 147, 148, 149, 150, 151, 152, 153, 160);
 
         PlayByPlay pbp2 = gameController.game("20201002MIALAL");
         assertNotNull(pbp2);
@@ -68,7 +68,7 @@ class GameControllerTest {
         List<Integer> ids2 = ps2.stream().map(Play::getId).collect(Collectors.toList());
         System.out.println(ids2);
         log.debug("{}", ids2);
-        assertThat(ids2).containsExactly(326, 327, 328, 329, 330, 338);
+        assertThat(ids2).containsExactly(326, 327, 328, 329, 330, 337, 338);
     }
 
     @Test
