@@ -9,7 +9,6 @@ import rs.edu.raf.msa.pbp.model.PlayByPlay;
 import java.io.IOException;
 import java.io.InputStream;
 
-
 @Service
 public class GameService {
 
@@ -28,6 +27,4 @@ public class GameService {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error opening game id=" + gameId);
         }
     }
-
-
 }

@@ -55,10 +55,9 @@ public class PlayByPlay {
 
         for (Map.Entry<String, Player> entry : getPlayers().entrySet()) {
             Player player = entry.getValue();
-//            player.setExternalId(entry.getKey());
+            player.setId(Long.parseLong(entry.getKey()));
             players.add(player);
         }
-//        return new ArrayList<>(getPlayers().values());
         return players;
     }
 
