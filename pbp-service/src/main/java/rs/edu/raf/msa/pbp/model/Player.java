@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class Player {
 
-    long id;
+    long externalId;
     String c;
     String f;
     String l;
