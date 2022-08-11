@@ -7,11 +7,11 @@ import lombok.Data;
 
 @Data
 @Builder
-public class Player {
+public class Game {
 
 	@Id
 	Long id;
 
-	// TODO Fill me
+	// TODO Also extend to save currently parsed status
 	
 }

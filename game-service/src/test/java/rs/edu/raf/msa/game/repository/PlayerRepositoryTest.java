@@ -1,8 +1,5 @@
 package rs.edu.raf.msa.game.repository;
 
-import static java.util.Arrays.asList;
-import static org.assertj.core.api.Assertions.assertThat;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,7 +7,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.extern.slf4j.Slf4j;
-import rs.edu.raf.msa.game.entity.Player;
+import rs.edu.raf.msa.game.entity.Game;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -19,31 +16,33 @@ import rs.edu.raf.msa.game.entity.Player;
 public class PlayerRepositoryTest {
 
 	@Autowired
+	GameRepository gameRepository;
+
+	@Autowired
 	PlayerRepository playerRepository;
+
+	@Autowired
+	PlayRepository playRepository;
+
+	@Test
+	void testAll() {
+		Game g = null;
+		g = gameRepository.save(g);
+		// TODO saving game
+	}
 
 	@Test
 	void savePlayer() {
-		Player p1 = Player.builder().externalId(203999L).shortName("nikola_jokic").firstName("Nikola").lastName("Jokic")
-				.build();
-		Player p2 = Player.builder().externalId(2544L).shortName("lebron_james").firstName("Lebron").lastName("James")
-				.build();
+		// TODO saving player 
+	}
 
-		playerRepository.saveAll(asList(p1, p2));
-
-		Iterable<Player> found = playerRepository.findAll();
-		log.debug("{}", found);
-		assertThat(found).contains(p1, p2);
+	@Test
+	void savePlay() {
+		// TODO saving play(s) from game
 	}
 
 	@Test
 	void findByExternalId() {
-		Player p1 = Player.builder().externalId(203999L).shortName("nikola_jokic").firstName("Nikola").lastName("Jokic")
-				.build();
-		Player p2 = Player.builder().externalId(2544L).shortName("lebron_james").firstName("Lebron").lastName("James")
-				.build();
-
-		playerRepository.saveAll(asList(p1, p2));
-
-		assertThat(playerRepository.findByExternalId(2544)).extracting(p -> p.getShortName()).isEqualTo("lebron_james");
+		// TODO finding player by external id
 	}
 }

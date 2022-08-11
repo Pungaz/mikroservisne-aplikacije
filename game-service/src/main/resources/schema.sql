@@ -1,8 +1,19 @@
 create table player(
 	id serial not null primary key, 
-	external_id int not null unique,
-	first_name varchar(20) not null,
-	last_name varchar(20) not null,
-	short_name varchar(20) not null unique);
+	-- TODO fill me
+);
 
--- TODO game, play
+create table game(
+	id serial not null primary key, 
+	-- TODO fill me
+);
+
+
+create table play(
+	id serial not null primary key, 
+	-- ...
+);
+
+create table play_player(
+	-- ...
+);
