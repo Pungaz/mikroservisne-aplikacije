@@ -1,11 +1,13 @@
 package rs.edu.raf.msa.game.entity;
 
+import lombok.*;
 import org.springframework.data.annotation.Id;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Builder;
 
+@Builder
 @Data
+@AllArgsConstructor
 @NoArgsConstructor
 public class Play {
 
@@ -15,7 +17,4 @@ public class Play {
 	Long externalId;
 
 	Long gameId;
-
-	// TODO Consider using @Builder
-	
 }

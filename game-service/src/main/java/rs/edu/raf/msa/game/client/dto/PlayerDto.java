@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class PlayerDto {
-
-	// TODO Fill me
-	
+    String c;
+    String f;
+    String l;
 }
