@@ -17,6 +17,8 @@ public class Game {
     @Id
     Long id;
 
+    String fileName;
+
     ArrayList<Player> players;
 
     ArrayList<Play> plays;

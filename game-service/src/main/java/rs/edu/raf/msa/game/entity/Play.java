@@ -2,8 +2,7 @@ package rs.edu.raf.msa.game.entity;
 
 import lombok.*;
 import org.springframework.data.annotation.Id;
-
-import lombok.Builder;
+import rs.edu.raf.msa.game.client.dto.PlayDto;
 
 @Builder
 @Data
@@ -11,10 +10,16 @@ import lombok.Builder;
 @NoArgsConstructor
 public class Play {
 
-	@Id
-	Long id;
+    @Id
+    @Generated
+    Long id;
 
-	Long externalId;
+    String name;
 
-	Long gameId;
+    Long gameId;
+
+    public Play(PlayDto playDto) {
+        this.name = playDto.getD();
+    }
+
 }
