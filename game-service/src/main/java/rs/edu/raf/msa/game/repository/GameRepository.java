@@ -9,6 +9,6 @@ public interface GameRepository extends PagingAndSortingRepository<Game, Id> {
 
     boolean existsByFileName(String fileName);
 
-    boolean save();
+//    boolean save();
 
 }

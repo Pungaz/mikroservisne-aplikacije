@@ -6,19 +6,22 @@ import org.springframework.web.bind.annotation.PathVariable;
 import rs.edu.raf.msa.game.client.dto.PlayDto;
 import rs.edu.raf.msa.game.client.dto.PlayerDto;
 
-import java.util.List;
+import java.util.ArrayList;
 
 @FeignClient(value = "gameClient", url = "http://localhost:8080/")
 public interface GameClient {
 
     @GetMapping("games")
-    List<String> games();
+    ArrayList<String> games();
+
+    @GetMapping("/game/{fileName}")
+    Object findGameByFileName(@PathVariable("fileName") String fileName);
 
     @GetMapping("players/{gameId}")
-    List<PlayerDto> players(@PathVariable String gameId);
+    ArrayList<PlayerDto> players(@PathVariable String gameId);
 
     @GetMapping("plays/{gameId}/{fromMin}/{toMin}")
-    List<PlayDto> plays(@PathVariable String gameId,
+    ArrayList<PlayDto> plays(@PathVariable String gameId,
                         @PathVariable String fromMin,
                         @PathVariable String toMin);
 

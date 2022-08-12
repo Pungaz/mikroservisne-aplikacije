@@ -1,9 +1,6 @@
 package rs.edu.raf.msa.game.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 
 import java.util.ArrayList;
@@ -15,6 +12,7 @@ import java.util.ArrayList;
 public class Game {
 
     @Id
+    @Generated
     Long id;
 
     String fileName;
@@ -28,5 +26,4 @@ public class Game {
     boolean finishedParsing;
 
     double endedParsingTime;
-
 }

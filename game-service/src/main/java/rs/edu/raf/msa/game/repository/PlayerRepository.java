@@ -4,9 +4,12 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import rs.edu.raf.msa.game.entity.Player;
 
+import java.util.ArrayList;
+
 public interface PlayerRepository extends PagingAndSortingRepository<Player, Id> {
 
-    //    ArrayList<Player> findPlayersByGameId(long gameId);
-//    Player findByExternalId(long externalId);
+//    ArrayList<Player> findPlayersByGameId(long gameId);
+
+    Player findByExternalId(long externalId);
 
 }

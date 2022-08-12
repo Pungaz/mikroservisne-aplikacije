@@ -1,11 +1,10 @@
 package rs.edu.raf.msa.game.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import rs.edu.raf.msa.game.client.dto.PlayerDto;
+
+import java.util.ArrayList;
 
 @Builder
 @Data
@@ -14,6 +13,7 @@ import rs.edu.raf.msa.game.client.dto.PlayerDto;
 public class Player {
 
     @Id
+    @Generated
     Long id;
 
     String fullName;
@@ -21,7 +21,18 @@ public class Player {
     long externalId;
 
     public Player(PlayerDto playerDto) {
-        this.fullName = playerDto.getC();
+        this.fullName = splitName(playerDto.getC());
         this.externalId = playerDto.getExternalId();
     }
+
+    String splitName(String string){
+        String[] array = string.split("_");
+        StringBuilder nameBuilder = new StringBuilder();
+
+        for (String word: array){
+            nameBuilder.append(word);
+        }
+        return nameBuilder.toString();
+    }
+
 }
