@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import static java.lang.Math.abs;
+import static rs.edu.raf.msa.pbp.utils.StringToDoubleConverter.fromStringToDouble;
 
 @Data
 public class PlayByPlay {
@@ -30,20 +31,6 @@ public class PlayByPlay {
             }
         }
         return result;
-    }
-
-    public double fromStringToDouble(String string) {
-        try {
-            if (!string.equals("12:00")) {
-                String[] stringArray = string.split(":");
-                return Double.parseDouble(stringArray[0]) + Double.parseDouble(stringArray[1]) / 100;
-            } else {
-                return 11.6;
-            }
-
-        } catch (ArrayIndexOutOfBoundsException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error with entered time period", e);
-        }
     }
 
     public double currentTime(int quarter, String currentTime) {
