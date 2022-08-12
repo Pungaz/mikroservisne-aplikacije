@@ -3,8 +3,6 @@ package rs.edu.raf.msa.game.entity;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 
-import java.util.ArrayList;
-
 @Builder
 @Data
 @AllArgsConstructor
@@ -12,18 +10,15 @@ import java.util.ArrayList;
 public class Game {
 
     @Id
-    @Generated
-    Long id;
+    long id;
 
     String fileName;
-
-    ArrayList<Player> players;
-
-    ArrayList<Play> plays;
 
     boolean startedParsing;
 
     boolean finishedParsing;
 
-    double endedParsingTime;
+    float lastParsedPlayId;
+
+    float lastParsedPlayTime;
 }

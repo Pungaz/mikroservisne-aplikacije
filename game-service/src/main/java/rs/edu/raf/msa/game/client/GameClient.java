@@ -22,7 +22,7 @@ public interface GameClient {
 
     @GetMapping("plays/{gameId}/{fromMin}/{toMin}")
     ArrayList<PlayDto> plays(@PathVariable String gameId,
-                        @PathVariable String fromMin,
-                        @PathVariable String toMin);
+                             @PathVariable String fromMin,
+                             @PathVariable String toMin);
 
 }

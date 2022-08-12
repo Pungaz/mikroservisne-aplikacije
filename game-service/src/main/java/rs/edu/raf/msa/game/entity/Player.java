@@ -4,8 +4,6 @@ import lombok.*;
 import org.springframework.data.annotation.Id;
 import rs.edu.raf.msa.game.client.dto.PlayerDto;
 
-import java.util.ArrayList;
-
 @Builder
 @Data
 @AllArgsConstructor
@@ -25,12 +23,12 @@ public class Player {
         this.externalId = playerDto.getExternalId();
     }
 
-    String splitName(String string){
+    String splitName(String string) {
         String[] array = string.split("_");
         StringBuilder nameBuilder = new StringBuilder();
 
-        for (String word: array){
-            nameBuilder.append(word);
+        for (String word : array) {
+            nameBuilder.append(word.substring(0, 1).toUpperCase()).append(word.substring(1)).append(" ");
         }
         return nameBuilder.toString();
     }
