@@ -6,6 +6,7 @@ import rs.edu.raf.msa.game.entity.Player;
 
 public interface PlayerRepository extends PagingAndSortingRepository<Player, Id> {
 
-//	Player findByExternalId(long externalId);
+    //    ArrayList<Player> findPlayersByGameId(long gameId);
+//    Player findByExternalId(long externalId);
 
 }

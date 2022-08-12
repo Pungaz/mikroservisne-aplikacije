@@ -7,4 +7,8 @@ import rs.edu.raf.msa.game.entity.Game;
 public interface GameRepository extends PagingAndSortingRepository<Game, Id> {
     Game findGameById(long id);
 
+    boolean existsByFileName(String fileName);
+
+    boolean save();
+
 }

@@ -34,8 +34,12 @@ public class PlayByPlay {
 
     public double fromStringToDouble(String string) {
         try {
-            String[] stringArray = string.split(":");
-            return Double.parseDouble(stringArray[0]) + Double.parseDouble(stringArray[1]) / 100;
+            if (!string.equals("12:00")) {
+                String[] stringArray = string.split(":");
+                return Double.parseDouble(stringArray[0]) + Double.parseDouble(stringArray[1]) / 100;
+            } else {
+                return 11.6;
+            }
 
         } catch (ArrayIndexOutOfBoundsException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error with entered time period", e);
@@ -43,11 +47,8 @@ public class PlayByPlay {
     }
 
     public double currentTime(int quarter, String currentTime) {
-        if (!currentTime.equals("12:00")) {
-            return ((quarter - 1) * 12) + abs(fromStringToDouble(currentTime) - 11.60);
-        } else {
-            return (quarter - 1) * 12;
-        }
+        return ((quarter - 1) * 12) + abs(fromStringToDouble(currentTime) - 11.60);
+
     }
 
     public List<Player> listPlayersByGameId() {
