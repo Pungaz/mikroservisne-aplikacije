@@ -34,16 +34,26 @@ public class GamePlayByPlayJob {
         log.info("Loaded games from pbp-service: {}", allGames);
 
         for (String fileName : allGames) {
-            if(!gameRepository.existsGameByFileName(fileName)){
+
+            if (!gameRepository.existsGameByFileName(fileName)) {
+
                 ArrayList<PlayerDto> playerDtos = gameClient.players(fileName);
+
                 for (PlayerDto playerDto : playerDtos) {
+
                     Player player = new Player(playerDto);
-                    if(!playerRepository.existsByExternalId(player.getExternalId())){
+
+                    if (!playerRepository.existsByExternalId(player.getExternalId())) {
                         playerRepository.save(player);
                     }
+
                 }
+
                 Game game = Game.builder().fileName(fileName).build();
                 gameRepository.save(game);
+
+            } else {
+
             }
         }
 
