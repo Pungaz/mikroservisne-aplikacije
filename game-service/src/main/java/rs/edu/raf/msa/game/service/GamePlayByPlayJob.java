@@ -72,14 +72,19 @@ public class GamePlayByPlayJob {
                 String gameFileName = allGames.get(i);
                 i++;
                 String start = "0:00";
-                String end = "2:00";
+                String end = "48:0";
 
                 ArrayList<PlayDto> playDtos = gameClient.plays(gameFileName, start, end);
-                log.info("Loaded {} plays from file: {}, time interval is from {} to {}", playDtos.size(), gameFileName, start, end);
+                log.info("Loaded {} plays from file: {}, time interval is from {} to {}", playDtos.size(),
+                        gameFileName, start, end);
 
                 Game currentGame = gameRepository.findGameByFileName(gameFileName);
 
                 for (PlayDto playDto : playDtos) {
+
+                    if (playDto.getAtin() == null) {
+                        playDto.setAtin(currentGame.getLastParsedPlayTime());
+                    }
 
                     if (playDto.getAtin().compareTo(currentGame.getLastParsedPlayTime()) > 0) {
 
@@ -98,6 +103,7 @@ public class GamePlayByPlayJob {
 
                     }
                 }
+                currentGame.setFinishedParsing(true);
             }
         }
     }
