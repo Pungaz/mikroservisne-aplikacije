@@ -8,6 +8,7 @@ import rs.edu.raf.msa.game.client.GameClient;
 import rs.edu.raf.msa.game.client.dto.PlayDto;
 import rs.edu.raf.msa.game.client.dto.PlayerDto;
 import rs.edu.raf.msa.game.entity.Game;
+import rs.edu.raf.msa.game.entity.Play;
 import rs.edu.raf.msa.game.entity.Player;
 import rs.edu.raf.msa.game.repository.GameRepository;
 import rs.edu.raf.msa.game.repository.PlayRepository;
@@ -33,11 +34,12 @@ public class GamePlayByPlayJob {
         List<String> allGames = gameClient.games();
         log.info("Loaded games from pbp-service: {}", allGames);
 
+        int i = 0;
+
         for (String fileName : allGames) {
 
-            int i = 0;
-
             if (!gameRepository.existsGameByFileName(fileName)) {
+                log.info("Game with filename: {} doesn't exist in db", fileName);
 
                 ArrayList<PlayerDto> playerDtos = gameClient.players(fileName);
 
@@ -50,32 +52,53 @@ public class GamePlayByPlayJob {
 
                     if (!playerRepository.existsByExternalId(player.getExternalId())) {
                         playerRepository.save(player);
+                        log.info("Saved player: {}", player);
                     }
 
                 }
 
                 Game game = Game.builder()
+                        .lastParsedPlayTime("0")
                         .fileName(fileName)
                         .startedParsing(true)
                         .build();
+
                 gameRepository.save(game);
+                log.info("Saved game: {}", game);
 
             } else {
+                log.info("Game with filename: {} exists in db", fileName);
 
                 String gameFileName = allGames.get(i);
-                String start = "9:00";
-                String end = "17:00";
-//                LocalTime start = LocalTime.of(0, 0, 0);
-//                LocalTime end = start.plusMinutes(1);
+                i++;
+                String start = "0:00";
+                String end = "2:00";
 
-                ArrayList<PlayDto> ps = gameClient.plays(gameFileName, start, end);
-                log.info("Loaded {} plays from file: {}, time interval is from {} to {}", ps.size(), gameFileName, start, end);
+                ArrayList<PlayDto> playDtos = gameClient.plays(gameFileName, start, end);
+                log.info("Loaded {} plays from file: {}, time interval is from {} to {}", playDtos.size(), gameFileName, start, end);
 
+                Game currentGame = gameRepository.findGameByFileName(gameFileName);
 
+                for (PlayDto playDto : playDtos) {
+
+                    if (playDto.getAtin().compareTo(currentGame.getLastParsedPlayTime()) > 0) {
+
+                        Play play = Play.builder()
+                                .gameId(currentGame.getId())
+                                .playName(playDto.getD())
+                                .externalId(playDto.getId())
+                                .atin(playDto.getAtin())
+                                .build();
+
+                        currentGame.setLastParsedPlayExternalId(play.getExternalId());
+                        currentGame.setLastParsedPlayTime(playDto.getAtin());
+
+                        playRepository.save(play);
+                        gameRepository.save(currentGame);
+
+                    }
+                }
             }
         }
-
-
     }
-
 }

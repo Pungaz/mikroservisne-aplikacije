@@ -3,6 +3,7 @@ package rs.edu.raf.msa.game.entity;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 
+
 @Builder
 @Data
 @AllArgsConstructor

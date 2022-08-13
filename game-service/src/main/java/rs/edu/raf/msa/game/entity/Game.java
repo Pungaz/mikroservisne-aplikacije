@@ -3,6 +3,7 @@ package rs.edu.raf.msa.game.entity;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 
+
 @Builder
 @Data
 @AllArgsConstructor
@@ -19,7 +20,7 @@ public class Game {
 
     boolean finishedParsing;
 
-    float lastParsedPlayId;
+    double lastParsedPlayExternalId;
 
-    float lastParsedPlayTime;
+    String lastParsedPlayTime;
 }
