@@ -10,6 +10,7 @@ import org.springframework.data.annotation.Id;
 public class Game {
 
     @Id
+    @Generated
     long id;
 
     String fileName;

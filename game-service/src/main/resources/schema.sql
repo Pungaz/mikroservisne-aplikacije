@@ -1,5 +1,7 @@
-drop table if exists game cascade;
 drop table if exists player cascade;
+drop table if exists game cascade;
+drop table if exists play cascade;
+drop table if exists play_player cascade;
 
 create table player
 (
@@ -18,13 +20,14 @@ create table game
     last_parsed_play_time int
 );
 
---
---
--- create table play(
--- 	id serial not null primary key,
--- 	-- ...
--- );
---
--- create table play_player(
--- 	-- ...
--- );
+create table play
+(
+    id     serial  not null primary key,
+    name   varchar not null,
+    gameId int     not null
+);
+
+create table play_player
+(
+
+);

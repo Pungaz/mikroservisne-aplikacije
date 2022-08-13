@@ -12,8 +12,8 @@ import rs.edu.raf.msa.game.entity.Player;
 import rs.edu.raf.msa.game.repository.GameRepository;
 import rs.edu.raf.msa.game.repository.PlayRepository;
 import rs.edu.raf.msa.game.repository.PlayerRepository;
+import rs.edu.raf.msa.game.utils.PlayerUtil;
 
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,13 +35,18 @@ public class GamePlayByPlayJob {
 
         for (String fileName : allGames) {
 
+            int i = 0;
+
             if (!gameRepository.existsGameByFileName(fileName)) {
 
                 ArrayList<PlayerDto> playerDtos = gameClient.players(fileName);
 
                 for (PlayerDto playerDto : playerDtos) {
 
-                    Player player = new Player(playerDto);
+                    Player player = Player.builder()
+                            .externalId(playerDto.getExternalId())
+                            .fullName(PlayerUtil.splitName(playerDto.getC()))
+                            .build();
 
                     if (!playerRepository.existsByExternalId(player.getExternalId())) {
                         playerRepository.save(player);
@@ -49,20 +54,28 @@ public class GamePlayByPlayJob {
 
                 }
 
-                Game game = Game.builder().fileName(fileName).build();
+                Game game = Game.builder()
+                        .fileName(fileName)
+                        .startedParsing(true)
+                        .build();
                 gameRepository.save(game);
 
             } else {
 
+                String gameFileName = allGames.get(i);
+                String start = "9:00";
+                String end = "17:00";
+//                LocalTime start = LocalTime.of(0, 0, 0);
+//                LocalTime end = start.plusMinutes(1);
+
+                ArrayList<PlayDto> ps = gameClient.plays(gameFileName, start, end);
+                log.info("Loaded {} plays from file: {}, time interval is from {} to {}", ps.size(), gameFileName, start, end);
+
+
             }
         }
 
-        String gameId = allGames.get(0);
-        LocalTime start = LocalTime.of(0, 0, 0);
 
-        LocalTime end = start.plusMinutes(1);
-        ArrayList<PlayDto> ps = gameClient.plays(gameId, start.toString(), end.toString());
-        log.info("Loaded {} plays from {}: {}", ps.size(), gameId, start);
     }
 
 }
