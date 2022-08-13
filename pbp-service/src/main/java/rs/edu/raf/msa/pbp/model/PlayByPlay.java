@@ -1,8 +1,6 @@
 package rs.edu.raf.msa.pbp.model;
 
 import lombok.Data;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -20,6 +18,10 @@ public class PlayByPlay {
     public List<Play> play(String fromMinString, String toMinString) {
         double fromMin = fromStringToDouble(fromMinString);
         double toMin = fromStringToDouble(toMinString);
+
+        if (fromMin > toMin || fromMin < 0.0 || toMin > 48.00) {
+            return null;
+        }
 
         List<Play> result = new ArrayList<>();
         for (Quarter quarter : quarters) {

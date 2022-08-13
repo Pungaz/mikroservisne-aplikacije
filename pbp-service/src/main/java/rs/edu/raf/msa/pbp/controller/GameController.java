@@ -3,6 +3,7 @@ package rs.edu.raf.msa.pbp.controller;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -50,11 +51,17 @@ public class GameController {
     }
 
     @GetMapping("/plays/{gameId}/{fromMin}/{toMin}")
-    public List<Play> plays(@PathVariable("gameId") String gameId,
-                            @PathVariable("fromMin") String fromMin,
-                            @PathVariable("toMin") String toMin) {
+    public ResponseEntity<?> plays(@PathVariable("gameId") String gameId,
+                                           @PathVariable("fromMin") String fromMin,
+                                           @PathVariable("toMin") String toMin) {
         PlayByPlay playByPlay = gameService.game(gameId);
-        return playByPlay.play(fromMin, toMin);
+        List<Play> plays = playByPlay.play(fromMin, toMin);
+
+        if(plays == null){
+            return ResponseEntity.status(400).body("The parameters are wrong");
+        }
+
+        return ResponseEntity.status(200).body(plays);
     }
 
     @GetMapping("/players/{gameId}")
