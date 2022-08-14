@@ -104,7 +104,10 @@ public class GamePlayByPlayJob {
                     }
                 }
                 currentGame.setFinishedParsing(true);
+                gameRepository.save(currentGame);
             }
         }
+        log.info("Finished parsing all the games");
+        return;
     }
 }

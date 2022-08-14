@@ -1,17 +1,19 @@
 package rs.edu.raf.msa.game.entity;
 
 import lombok.*;
-import org.springframework.data.annotation.Id;
+
+import javax.persistence.*;
 
 
 @Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
 public class Play {
 
     @Id
-    @Generated
+    @GeneratedValue(strategy= GenerationType.AUTO)
     Long id;
 
     long externalId;
