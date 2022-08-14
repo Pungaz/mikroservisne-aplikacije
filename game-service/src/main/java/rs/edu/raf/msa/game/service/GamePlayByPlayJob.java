@@ -37,7 +37,6 @@ public class GamePlayByPlayJob {
 
     @Scheduled(fixedDelay = 5_000)
     public void scanGames() {
-
         if (enabled) {
 
             List<String> allGames = gameClient.games();
@@ -67,7 +66,6 @@ public class GamePlayByPlayJob {
                     Game game = Game.builder()
                             .lastParsedPlayTime("0")
                             .fileName(fileName)
-                            .startedParsing(true)
                             .build();
 
                     gameRepository.save(game);
@@ -77,7 +75,7 @@ public class GamePlayByPlayJob {
                     log.info("Game with filename: {} exists in db", fileName);
 
                     String start = "0:00";
-                    String end = "48:0";
+                    String end = "48:00";
 
                     ArrayList<PlayDto> playDtos = gameClient.plays(fileName, start, end);
                     log.info("Loaded {} plays from file: {}, time interval is from {} to {}", playDtos.size(),

@@ -21,8 +21,6 @@ public class Game {
 
     String fileName;
 
-    boolean startedParsing;
-
     boolean finishedParsing;
 
     double lastParsedPlayExternalId;
