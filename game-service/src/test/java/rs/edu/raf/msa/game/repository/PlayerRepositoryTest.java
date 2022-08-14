@@ -26,9 +26,14 @@ public class PlayerRepositoryTest {
 
 	@Test
 	void testAll() {
-		Game g = null;
+		Game g = new Game();
+		g.setFileName("123");
 		g = gameRepository.save(g);
-		// TODO saving game
+
+		Game gameTest = gameRepository.findGameByFileName("123");
+
+
+
 	}
 
 	@Test

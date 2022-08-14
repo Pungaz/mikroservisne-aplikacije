@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface PlayRepository extends PagingAndSortingRepository<Play, Long> {
 
+    Play findPlayByExternalIdAndGameId(long externalId, long gameId);
+
 }

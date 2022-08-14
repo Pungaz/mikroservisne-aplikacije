@@ -10,8 +10,10 @@ import rs.edu.raf.msa.game.client.dto.PlayDto;
 import rs.edu.raf.msa.game.client.dto.PlayerDto;
 import rs.edu.raf.msa.game.entity.Game;
 import rs.edu.raf.msa.game.entity.Play;
+import rs.edu.raf.msa.game.entity.PlayPlayer;
 import rs.edu.raf.msa.game.entity.Player;
 import rs.edu.raf.msa.game.repository.GameRepository;
+import rs.edu.raf.msa.game.repository.PlayPlayerRepository;
 import rs.edu.raf.msa.game.repository.PlayRepository;
 import rs.edu.raf.msa.game.repository.PlayerRepository;
 import rs.edu.raf.msa.game.utils.PlayerUtil;
@@ -29,6 +31,7 @@ public class GamePlayByPlayJob {
     final PlayerRepository playerRepository;
     final GameRepository gameRepository;
     final PlayRepository playRepository;
+    final PlayPlayerRepository playPlayerRepository;
 
     int finishedGameCounter = 0;
 
@@ -56,7 +59,7 @@ public class GamePlayByPlayJob {
                                 .fullName(PlayerUtil.splitName(playerDto.getC()))
                                 .build();
 
-                        if (!playerRepository.existsByExternalId(player.getExternalId())) {
+                        if (!playerRepository.existsByExternalId(playerDto.getExternalId())) {
                             playerRepository.save(player);
                             log.info("Saved player: {}", player);
                         }
@@ -103,6 +106,22 @@ public class GamePlayByPlayJob {
 
                             playRepository.save(play);
                             gameRepository.save(currentGame);
+
+                            if (playDto.getPlayers() != null) {
+                                for (String playerExternalId : playDto.getPlayers()) {
+
+                                    if (playerRepository.existsByExternalId(Long.parseLong(playerExternalId))) {
+
+                                        PlayPlayer playPlayer = PlayPlayer.builder()
+                                                .player(playerRepository.findPlayerByExternalId(Long.parseLong(playerExternalId)))
+                                                .play(playRepository.findPlayByExternalIdAndGameId(play.getExternalId(), currentGame.getId()))
+                                                .gameId(currentGame.getId())
+                                                .build();
+
+                                        playPlayerRepository.save(playPlayer);
+                                    }
+                                }
+                            }
 
                         }
                     }

@@ -7,4 +7,6 @@ public interface PlayerRepository extends PagingAndSortingRepository<Player, Lon
 
     boolean existsByExternalId(long externalId);
 
+    Player findPlayerByExternalId(long externalId);
+
 }

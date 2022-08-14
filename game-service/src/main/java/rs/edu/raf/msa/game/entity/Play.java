@@ -3,6 +3,9 @@ package rs.edu.raf.msa.game.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.List;
+import java.util.Set;
 
 
 @Builder
@@ -10,11 +13,15 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Play {
+public class Play implements Serializable {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     Long id;
+
+    @OneToMany(mappedBy = "play", fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
+    List<PlayPlayer> playPlayerSet;
 
     long externalId;
 
@@ -24,6 +31,5 @@ public class Play {
 
     String atin;
 
-//    @ManyToMany
-//    Set<Course> likedCourses;
+
 }
