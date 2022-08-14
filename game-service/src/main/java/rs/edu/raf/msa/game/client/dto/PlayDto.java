@@ -6,6 +6,7 @@ import java.util.List;
 
 @Data
 public class PlayDto {
+
     int p;
     String a;
     String c;

@@ -2,6 +2,7 @@ package rs.edu.raf.msa.game.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import rs.edu.raf.msa.game.client.GameClient;
@@ -29,85 +30,95 @@ public class GamePlayByPlayJob {
     final GameRepository gameRepository;
     final PlayRepository playRepository;
 
+    int finishedGameCounter = 0;
+
+    @Value("${jobs.enabled:true}")
+    private boolean enabled = true;
+
     @Scheduled(fixedDelay = 5_000)
     public void scanGames() {
-        List<String> allGames = gameClient.games();
-        log.info("Loaded games from pbp-service: {}", allGames);
 
-        int i = 0;
+        if (enabled) {
 
-        for (String fileName : allGames) {
+            List<String> allGames = gameClient.games();
+            log.info("Loaded games from pbp-service: {}", allGames);
 
-            if (!gameRepository.existsGameByFileName(fileName)) {
-                log.info("Game with filename: {} doesn't exist in db", fileName);
+            for (String fileName : allGames) {
 
-                ArrayList<PlayerDto> playerDtos = gameClient.players(fileName);
+                if (!gameRepository.existsGameByFileName(fileName)) {
+                    log.info("Game with filename: {} doesn't exist in db", fileName);
 
-                for (PlayerDto playerDto : playerDtos) {
+                    ArrayList<PlayerDto> playerDtos = gameClient.players(fileName);
 
-                    Player player = Player.builder()
-                            .externalId(playerDto.getExternalId())
-                            .fullName(PlayerUtil.splitName(playerDto.getC()))
-                            .build();
+                    for (PlayerDto playerDto : playerDtos) {
 
-                    if (!playerRepository.existsByExternalId(player.getExternalId())) {
-                        playerRepository.save(player);
-                        log.info("Saved player: {}", player);
-                    }
-
-                }
-
-                Game game = Game.builder()
-                        .lastParsedPlayTime("0")
-                        .fileName(fileName)
-                        .startedParsing(true)
-                        .build();
-
-                gameRepository.save(game);
-                log.info("Saved game: {}", game);
-
-            } else {
-                log.info("Game with filename: {} exists in db", fileName);
-
-                String gameFileName = allGames.get(i);
-                i++;
-                String start = "0:00";
-                String end = "48:0";
-
-                ArrayList<PlayDto> playDtos = gameClient.plays(gameFileName, start, end);
-                log.info("Loaded {} plays from file: {}, time interval is from {} to {}", playDtos.size(),
-                        gameFileName, start, end);
-
-                Game currentGame = gameRepository.findGameByFileName(gameFileName);
-
-                for (PlayDto playDto : playDtos) {
-
-                    if (playDto.getAtin() == null) {
-                        playDto.setAtin(currentGame.getLastParsedPlayTime());
-                    }
-
-                    if (playDto.getAtin().compareTo(currentGame.getLastParsedPlayTime()) > 0) {
-
-                        Play play = Play.builder()
-                                .gameId(currentGame.getId())
-                                .playName(playDto.getD())
-                                .externalId(playDto.getId())
-                                .atin(playDto.getAtin())
+                        Player player = Player.builder()
+                                .externalId(playerDto.getExternalId())
+                                .fullName(PlayerUtil.splitName(playerDto.getC()))
                                 .build();
 
-                        currentGame.setLastParsedPlayExternalId(play.getExternalId());
-                        currentGame.setLastParsedPlayTime(playDto.getAtin());
-
-                        playRepository.save(play);
-                        gameRepository.save(currentGame);
+                        if (!playerRepository.existsByExternalId(player.getExternalId())) {
+                            playerRepository.save(player);
+                            log.info("Saved player: {}", player);
+                        }
 
                     }
+
+                    Game game = Game.builder()
+                            .lastParsedPlayTime("0")
+                            .fileName(fileName)
+                            .startedParsing(true)
+                            .build();
+
+                    gameRepository.save(game);
+                    log.info("Saved game: {}", game);
+
+                } else {
+                    log.info("Game with filename: {} exists in db", fileName);
+
+                    String start = "0:00";
+                    String end = "48:0";
+
+                    ArrayList<PlayDto> playDtos = gameClient.plays(fileName, start, end);
+                    log.info("Loaded {} plays from file: {}, time interval is from {} to {}", playDtos.size(),
+                            fileName, start, end);
+
+                    Game currentGame = gameRepository.findGameByFileName(fileName);
+
+                    for (PlayDto playDto : playDtos) {
+
+                        if (playDto.getAtin() == null) {
+                            playDto.setAtin(currentGame.getLastParsedPlayTime());
+                        }
+
+                        if (playDto.getAtin().compareTo(currentGame.getLastParsedPlayTime()) > 0) {
+
+                            Play play = Play.builder()
+                                    .gameId(currentGame.getId())
+                                    .playName(playDto.getD())
+                                    .externalId(playDto.getId())
+                                    .atin(playDto.getAtin())
+                                    .build();
+
+                            currentGame.setLastParsedPlayExternalId(play.getExternalId());
+                            currentGame.setLastParsedPlayTime(playDto.getAtin());
+
+                            playRepository.save(play);
+                            gameRepository.save(currentGame);
+
+                        }
+                    }
+                    currentGame.setFinishedParsing(true);
+                    gameRepository.save(currentGame);
+                    finishedGameCounter++;
+
+                    if (finishedGameCounter == allGames.size()) {
+                        enabled = false;
+                        log.info("All games are finished parsing");
+                    }
+
                 }
-                currentGame.setFinishedParsing(true);
-                gameRepository.save(currentGame);
             }
         }
-        log.info("Finished parsing all the games");
-        return;
     }
 }

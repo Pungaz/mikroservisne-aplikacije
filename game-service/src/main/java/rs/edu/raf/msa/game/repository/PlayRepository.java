@@ -7,8 +7,5 @@ import rs.edu.raf.msa.game.entity.Play;
 import java.util.List;
 
 public interface PlayRepository extends PagingAndSortingRepository<Play, Long> {
-    List<Play> findByGameId(Long id, Sort sort);
-
-    boolean existsByExternalIdAndGameId(long externalId, long gameId);
 
 }
