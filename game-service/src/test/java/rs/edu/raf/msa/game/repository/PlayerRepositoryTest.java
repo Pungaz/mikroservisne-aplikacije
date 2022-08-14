@@ -1,13 +1,16 @@
 package rs.edu.raf.msa.game.repository;
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
+import rs.edu.raf.msa.game.entity.Player;
 
-import lombok.extern.slf4j.Slf4j;
-import rs.edu.raf.msa.game.entity.Game;
+import java.util.ArrayList;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -15,39 +18,27 @@ import rs.edu.raf.msa.game.entity.Game;
 @Transactional
 public class PlayerRepositoryTest {
 
-	@Autowired
-	GameRepository gameRepository;
+    @Autowired
+    PlayerRepository playerRepository;
 
-	@Autowired
-	PlayerRepository playerRepository;
+    @Test
+    void savePlayer() {
+        Player player = new Player();
+        playerRepository.save(player);
 
-	@Autowired
-	PlayRepository playRepository;
+        ArrayList<Player> playerTestList = (ArrayList<Player>) playerRepository.findAll();
 
-	@Test
-	void testAll() {
-		Game g = new Game();
-		g.setFileName("123");
-		g = gameRepository.save(g);
+        assertNotNull(playerTestList);
+    }
 
-		Game gameTest = gameRepository.findGameByFileName("123");
+    @Test
+    void findByExternalId() {
+        Player player = new Player();
+        player.setExternalId(123);
+        playerRepository.save(player);
 
+        Player playerTest = playerRepository.findPlayerByExternalId(123);
 
-
-	}
-
-	@Test
-	void savePlayer() {
-		// TODO saving player 
-	}
-
-	@Test
-	void savePlay() {
-		// TODO saving play(s) from game
-	}
-
-	@Test
-	void findByExternalId() {
-		// TODO finding player by external id
-	}
+        assertNotNull(playerTest);
+    }
 }

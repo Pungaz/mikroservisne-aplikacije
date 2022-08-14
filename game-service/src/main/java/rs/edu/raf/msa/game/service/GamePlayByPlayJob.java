@@ -109,7 +109,6 @@ public class GamePlayByPlayJob {
 
                             if (playDto.getPlayers() != null) {
                                 for (String playerExternalId : playDto.getPlayers()) {
-
                                     if (playerRepository.existsByExternalId(Long.parseLong(playerExternalId))) {
 
                                         PlayPlayer playPlayer = PlayPlayer.builder()
@@ -125,6 +124,7 @@ public class GamePlayByPlayJob {
 
                         }
                     }
+
                     currentGame.setFinishedParsing(true);
                     gameRepository.save(currentGame);
                     finishedGameCounter++;
@@ -133,7 +133,6 @@ public class GamePlayByPlayJob {
                         enabled = false;
                         log.info("All games are finished parsing");
                     }
-
                 }
             }
         }
