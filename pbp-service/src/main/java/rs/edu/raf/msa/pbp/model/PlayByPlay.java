@@ -41,14 +41,14 @@ public class PlayByPlay {
     }
 
     public List<Player> listPlayersByGameId() {
-        List<Player> players = new ArrayList<>();
+        ArrayList<Player> playerArrayList = new ArrayList<>();
 
         for (Map.Entry<String, Player> entry : getPlayers().entrySet()) {
             Player player = entry.getValue();
             player.setExternalId(Long.parseLong(entry.getKey()));
-            players.add(player);
+            playerArrayList.add(player);
         }
-        return players;
+        return playerArrayList;
     }
 
 }

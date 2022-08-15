@@ -58,7 +58,7 @@ public class GameController {
         List<Play> plays = playByPlay.play(fromMin, toMin);
 
         if(plays == null){
-            return ResponseEntity.status(400).body("The parameters are wrong");
+            return ResponseEntity.status(400).body("The parameter of starting time or ending time is wrong");
         }
 
         return ResponseEntity.status(200).body(plays);
