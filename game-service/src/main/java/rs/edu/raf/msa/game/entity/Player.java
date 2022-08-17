@@ -1,10 +1,12 @@
 package rs.edu.raf.msa.game.entity;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.Set;
 
 
 @Builder
@@ -15,10 +17,11 @@ import java.util.Set;
 public class Player {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
 
-    @OneToMany(mappedBy = "player")
+    @OneToMany(mappedBy = "player", fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
     List<PlayPlayer> playPlayerSet;
 
     String fullName;
