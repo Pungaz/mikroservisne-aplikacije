@@ -22,8 +22,6 @@ public class MessagingConfig {
 		return new Queue(MY_QUEUE_NAME, NON_DURABLE);
 	}
 
-	// Konfiguracija koja nam dozvoljava da šaljemo objekte u JSON obliku
-
 	@Bean
 	public Jackson2JsonMessageConverter producerJackson2MessageConverter() {
 		return new Jackson2JsonMessageConverter();

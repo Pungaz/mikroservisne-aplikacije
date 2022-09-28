@@ -8,11 +8,9 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 public class PlayerScore {
-
 	Long gameId;
 	
 	String player;
 
 	int points;
-
 }
