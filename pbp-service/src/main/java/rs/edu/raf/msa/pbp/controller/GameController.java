@@ -61,7 +61,7 @@ public class GameController {
             return ResponseEntity.status(400).body("The parameter of starting time or ending time is wrong");
         }
 
-        return ResponseEntity.status(200).body(plays);
+        return ResponseEntity.ok(plays);
     }
 
     @GetMapping("/players/{gameId}")
