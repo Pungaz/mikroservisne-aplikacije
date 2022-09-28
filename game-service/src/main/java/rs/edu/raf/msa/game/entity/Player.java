@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 
 
 @Builder
@@ -22,7 +22,7 @@ public class Player {
 
     @OneToMany(mappedBy = "player", fetch = FetchType.LAZY,
             cascade = CascadeType.ALL)
-    List<PlayPlayer> playPlayerSet;
+    Set<PlayPlayer> playPlayerSet;
 
     String fullName;
 

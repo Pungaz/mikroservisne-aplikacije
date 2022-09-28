@@ -17,16 +17,15 @@ public class PlayPlayer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    long id;
+    private long id;
 
     @ManyToOne
     @JoinColumn(name = "play_id")
-    Play play;
+    private Play play;
 
     @ManyToOne
     @JoinColumn(name = "player_id")
-    Player player;
+    private Player player;
 
-    long gameId;
-
+    private long gameId;
 }

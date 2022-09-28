@@ -1,7 +1,11 @@
 package rs.edu.raf.msa.game.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -12,6 +16,7 @@ import rs.edu.raf.msa.game.entity.Game;
 import rs.edu.raf.msa.game.entity.Play;
 import rs.edu.raf.msa.game.entity.PlayPlayer;
 import rs.edu.raf.msa.game.entity.Player;
+import rs.edu.raf.msa.game.messageBroker.message.GamesAreFinishedParsingMessage;
 import rs.edu.raf.msa.game.repository.GameRepository;
 import rs.edu.raf.msa.game.repository.PlayPlayerRepository;
 import rs.edu.raf.msa.game.repository.PlayRepository;
@@ -26,22 +31,23 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class GamePlayByPlayJob {
-
     final GameClient gameClient;
     final PlayerRepository playerRepository;
     final GameRepository gameRepository;
     final PlayRepository playRepository;
     final PlayPlayerRepository playPlayerRepository;
-
+    final RabbitTemplate template;
     int finishedGameCounter = 0;
 
     @Value("${jobs.enabled:true}")
     private boolean enabled = true;
 
-    @Scheduled(fixedDelay = 5_000)
-    public void scanGames() {
-        if (enabled) {
+    @Value("${rabbitmq.queue}")
+    private String queueName;
 
+    @Scheduled(fixedDelay = 5_000)
+    public void scanGames() throws JsonProcessingException {
+        if (enabled) {
             List<String> allGames = gameClient.games();
             log.info("Loaded games from pbp-service: {}", allGames);
 
@@ -121,7 +127,6 @@ public class GamePlayByPlayJob {
                                     }
                                 }
                             }
-
                         }
                     }
 
@@ -131,10 +136,22 @@ public class GamePlayByPlayJob {
 
                     if (finishedGameCounter == allGames.size()) {
                         enabled = false;
-                        log.info("All games are finished parsing");
+                        log.info("All games are finished parsing and a message is sent through the broker");
+                        convertAndSend("Finished");
                     }
                 }
             }
         }
+    }
+
+    public void convertAndSend(String message) throws JsonProcessingException {
+        //For some reason conversion to object isn't working as expected
+//        GamesAreFinishedParsingMessage messageToBeSent = GamesAreFinishedParsingMessage.builder()
+//                .message(message)
+//                .build();
+//
+//        template.convertAndSend(queueName, messageToBeSent);
+
+        template.convertAndSend(queueName, message);
     }
 }
